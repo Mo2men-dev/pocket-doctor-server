@@ -4,13 +4,13 @@
   "description": "Pocket Doctor Server",
   "main": "index.js",
   "scripts": {
+    "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test",
+    "lint": "eslint -c .eslintrc.js . --ext .ts",
     "build": "npx tsc",
-    "start": "npm run build && node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "lint": "eslint -c .eslint.js . --ext .ts",
-    "prettier": "prettier --config .prettierrc src/**/*.ts --write",
+    "start": "npm run build && node dist/.",
     "jasmine": "jasmine",
-    "test": "set ENV=test && db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test"
+    "prettier": "prettier --config .prettierrc {,!(node_modules)/**/}*.ts --write"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
