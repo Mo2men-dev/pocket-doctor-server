@@ -8,7 +8,7 @@ import mediator from './src/handlers/mediators';
 const app = express();
 const port = process.env.PORT || 3000;
 const corsOptions = {
-  origin: [`http://localhost:${port}`, process.env.CLIENT_URL as string],
+  origin: [`http://localhost:${port}`, `${process.env.CLIENT_URL}`],
 
   optionsSuccessStatus: 200
 };
