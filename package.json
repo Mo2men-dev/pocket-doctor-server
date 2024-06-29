@@ -7,7 +7,7 @@
     "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test",
     "lint": "eslint -c .eslintrc.js . --ext .ts",
     "build": "npx tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon index.ts",
     "start": "npm run build && node dist/.",
     "jasmine": "jasmine",
     "prettier": "prettier --config .prettierrc {,!(node_modules)/**/}*.ts --write"
