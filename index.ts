@@ -3,6 +3,7 @@ import cors from 'cors';
 import conditions from './src/handlers/conditions';
 import symptoms from './src/handlers/symptoms';
 import mediator from './src/handlers/mediators';
+import bodyParser from 'body-parser';
 
 // Express app setup
 const app = express();
@@ -15,6 +16,8 @@ const corsOptions = {
 
 // Middleware
 app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Routes
