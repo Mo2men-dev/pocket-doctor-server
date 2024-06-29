@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS conditions_symptoms (
+  id SERIAL PRIMARY KEY,
+  condition_id INT NOT NULL,
+  symptom_id INT NOT NULL,
+  FOREIGN KEY (condition_id) REFERENCES conditions(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (symptom_id) REFERENCES symptoms(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
