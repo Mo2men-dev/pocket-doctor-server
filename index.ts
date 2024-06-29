@@ -63,7 +63,7 @@ symptoms(app);
 mediator(app);
 
 // Start server
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
