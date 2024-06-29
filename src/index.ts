@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import conditions from './src/handlers/conditions';
-import symptoms from './src/handlers/symptoms';
-import mediator from './src/handlers/mediators';
+import conditions from './handlers/conditions';
+import symptoms from './handlers/symptoms';
+import mediator from './handlers/mediators';
 import bodyParser from 'body-parser';
 
 // Express app setup
