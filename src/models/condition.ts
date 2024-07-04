@@ -7,7 +7,7 @@ export interface Condition {
   description?: string;
 }
 
-type ConditionWithSymptoms = { condition: Condition; symptoms: Symptom[] };
+type ConditionWithSymptoms = { condition: Condition; symptoms: string[] };
 
 export class ConditionStore {
   async index(): Promise<Condition[]> {
@@ -28,20 +28,47 @@ export class ConditionStore {
   async indexWithSymptoms(): Promise<ConditionWithSymptoms[]> {
     try {
       const conn = await client.connect();
-      const sql = 'SELECT * FROM conditions';
+      // join the conditions, conditions_symptoms, and symptoms tables
+      // to get all conditions with their associated symptoms
+      // and group the results by condition ID
+      // much better than making multiple queries, i would say
 
-      // get all conditions with associated symptoms
+      const sql = `
+          SELECT c.*, s.name as symptom_name
+          FROM conditions c
+          LEFT JOIN conditions_symptoms cs ON c.id = cs.condition_id
+          LEFT JOIN symptoms s ON cs.symptom_id = s.id
+        `;
+
       const result = await conn.query(sql);
-      const conditions = result.rows;
-      const conditionIds = conditions.map((c: any) => c.id);
-      const conditionsWithSymptoms = await Promise.all(
-        conditionIds.map((id: number) => this.showWithSymptoms(id.toString()))
-      );
+
+      // here we will create an object with the condition ID as the key
+      const conditions: { [key: number]: ConditionWithSymptoms } = {};
+      result.rows.forEach((row: any) => {
+        const conditionId = row.id;
+        if (!conditions[conditionId]) {
+          // if the condition doesn't exist in the object
+          // add the condition to the object if it doesn't exist
+          // initialize the symptoms array
+          // and remove the symptom_name key from the condition object
+
+          conditions[conditionId] = {
+            condition: { name: row.name, description: row.description },
+            symptoms: []
+          };
+        }
+        if (row.symptom_name) {
+          // if the symptom_name exists, add it to the symptoms array
+          conditions[conditionId].symptoms.push(row.symptom_name);
+        }
+      });
 
       conn.release();
-      return conditionsWithSymptoms.map((c) => c);
-    } catch (err) {
-      throw new Error(`Could not get conditions. Error: ${err}`);
+
+      return Object.values(conditions);
+    } catch (error) {
+      console.error('Failed to get conditions with symptoms:', error);
+      throw error; // Rethrow or handle as needed
     }
   }
 
@@ -136,17 +163,18 @@ export class ConditionStore {
     }
   }
 
-  async getAssociatedSymptoms(id: string): Promise<Condition[] | null> {
+  async getAssociatedSymptoms(id: string): Promise<string[] | null> {
     try {
+      const symptomStore = new SymptomStore();
+      const allSymptoms: Symptom[] = await symptomStore.index();
       const conn = await client.connect();
       const sql = 'SELECT * FROM conditions_symptoms WHERE condition_id=($1)';
       const result = await conn.query(sql, [id]);
 
-      const associatedSymptoms = result.rows;
-      const symptomIds = associatedSymptoms.map((s: any) => s.symptom_id);
-      const symptoms = await Promise.all(
-        symptomIds.map((id: number) => new SymptomStore().show(id.toString()))
-      );
+      const symptomIds = result.rows.map((r: any) => r.symptom_id);
+      const symptoms = allSymptoms
+        .filter((s) => symptomIds.includes(s.id))
+        .map((s) => s.name);
 
       conn.release();
       return symptoms;
