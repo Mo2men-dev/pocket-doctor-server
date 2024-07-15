@@ -11,7 +11,7 @@ const corsOptions = {
   origin: [
     `${process.env.CLIENT_URL}`,
     `${process.env.DASHBOARD_URL}`,
-    `http://localhost:${port}`
+    `http://localhost:5173`
   ],
   optionsSuccessStatus: 200
 };
