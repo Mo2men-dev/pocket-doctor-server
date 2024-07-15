@@ -53,7 +53,7 @@ export class ConditionStore {
           // and remove the symptom_name key from the condition object
 
           conditions[conditionId] = {
-            condition: { name: row.name, description: row.description },
+            condition: { id: row.id, name: row.name, description: row.description },
             symptoms: []
           };
         }
