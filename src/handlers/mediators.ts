@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Mediator, MediatorStore } from '../models/mediator';
 import { Condition, ConditionStore } from '../models/condition';
 import { Symptom, SymptomStore } from '../models/symptom';
+import { authMiddleware } from '../middleware/auth';
 
 const store = new MediatorStore();
 const conditionStore = new ConditionStore();
@@ -100,10 +101,14 @@ const createFromName = async (req: Request, res: Response) => {
 };
 
 const mediator = (app: express.Application) => {
-  app.get('/mediator', index);
-  app.get('/mediator/conditions/:condition_name', searchConditions);
-  app.get('/mediator/symptoms/:symptom_name', searchSymptoms);
-  app.post('/mediator/add', create);
+  app.get('/mediator', authMiddleware, index);
+  app.get(
+    '/mediator/conditions/:condition_name',
+    authMiddleware,
+    searchConditions
+  );
+  app.get('/mediator/symptoms/:symptom_name', authMiddleware, searchSymptoms);
+  app.post('/mediator/add', authMiddleware, create);
 };
 
 export default mediator;

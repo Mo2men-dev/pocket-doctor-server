@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Symptom, SymptomStore } from '../models/symptom';
+import { authMiddleware } from '../middleware/auth';
 
 const store = new SymptomStore();
 
@@ -48,10 +49,10 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const symptoms = (app: express.Application) => {
-  app.get('/symptoms', index);
-  app.get('/symptoms/:id', show);
-  app.post('/symptoms/add', create);
-  app.delete('/symptoms/:id/delete', destroy);
+  app.get('/symptoms', authMiddleware, index);
+  app.get('/symptoms/:id', authMiddleware, show);
+  app.post('/symptoms/add', authMiddleware, create);
+  app.delete('/symptoms/:id/delete', authMiddleware, destroy);
 };
 
 export default symptoms;

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Condition, ConditionStore } from '../models/condition';
+import { authMiddleware } from '../middleware/auth';
 
 const store = new ConditionStore();
 
@@ -81,13 +82,13 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const conditions = (app: express.Application) => {
-  app.get('/conditions', index);
-  app.get('/conditions/all/symptoms', indexWithSymptoms);
-  app.get('/conditions/:id', show);
-  app.get('/conditions/:id/symptoms', showWithSymptoms);
-  app.get('/conditions/search/:name', search);
-  app.post('/conditions/add', create);
-  app.delete('/conditions/:id/delete', destroy);
+  app.get('/conditions', authMiddleware, index);
+  app.get('/conditions/all/symptoms', authMiddleware, indexWithSymptoms);
+  app.get('/conditions/:id', authMiddleware, show);
+  app.get('/conditions/:id/symptoms', authMiddleware, showWithSymptoms);
+  app.get('/conditions/search/:name', authMiddleware, search);
+  app.post('/conditions/add', authMiddleware, create);
+  app.delete('/conditions/:id/delete', authMiddleware, destroy);
 };
 
 export default conditions;
