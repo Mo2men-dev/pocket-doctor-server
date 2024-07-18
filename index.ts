@@ -3,12 +3,7 @@ import cors from 'cors';
 import conditions from './src/handlers/conditions';
 import symptoms from './src/handlers/symptoms';
 import mediator from './src/handlers/mediators';
-
-const ENV = process.env.ENV;
-export const allowedOrigins =
-  ENV === 'prod'
-    ? [`${process.env.CLIENT_URL}`, `${process.env.DASHBOARD_URL}`]
-    : ['http://localhost:5173', 'http://localhost:5174'];
+import { allowedOrigins } from './src/config/origins';
 
 // Express app setup
 const app = express();
