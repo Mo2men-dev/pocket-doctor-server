@@ -1,6 +1,24 @@
 {
   "dev": {
     "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "pockect_doctor_dev",
+    "user": "postgres",
+    "password": "postgres"
+  },
+
+  "test": {
+    "driver": "pg",
+    "host": "localhost",
+    "port": 5432,
+    "database": "pockect_doctor_test",
+    "user": "postgres",
+    "password": "postgres"
+  },
+
+  "prod": {
+    "driver": "pg",
     "host": {
       "ENV": "POSTGRES_HOST"
     },
@@ -17,20 +35,5 @@
       "ENV": "POSTGRES_PORT"
     },
     "ssl": "true"
-  },
-  "test": {
-    "driver": "pg",
-    "host": {
-      "ENV": "POSTGRES_HOST"
-    },
-    "database": {
-      "ENV": "POSTGRES_TEST_DB"
-    },
-    "user": {
-      "ENV": "POSTGRES_USER"
-    },
-    "password": {
-      "ENV": "POSTGRES_PASSWORD"
-    }
   }
 }

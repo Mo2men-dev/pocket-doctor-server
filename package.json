@@ -4,7 +4,7 @@
   "description": "Pocket Doctor Server",
   "main": "index.js",
   "scripts": {
-    "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test",
+    "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate --env test down",
     "lint": "eslint -c .eslintrc.js . --ext .ts",
     "build": "npx tsc",
     "dev": "nodemon index.ts",
