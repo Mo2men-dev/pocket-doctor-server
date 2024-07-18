@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { allowedOrigins } from '../..';
+import { allowedOrigins } from '../../index';
 
 export const authMiddleware = async (
   req: Request,
